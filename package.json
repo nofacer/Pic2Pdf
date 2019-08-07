@@ -1,5 +1,5 @@
 {
-  "name": "electron-vue",
+  "name": "comic2pdf",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint",
     "dev": "NODE_ENV=DEV vue-cli-service serve & sleep 5 && NODE_ENV=DEV electron app.js",
     "test:unit": "vue-cli-service test:unit",
-    "test": "jest -c custom.jest.config.js"
+    "test": "npm run build && jest -c custom.jest.config.js"
   },
   "dependencies": {
     "core-js": "^2.6.5",
