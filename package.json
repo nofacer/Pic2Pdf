@@ -7,8 +7,10 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "dev": "NODE_ENV=DEV vue-cli-service serve & sleep 5 && NODE_ENV=DEV electron app.js",
-    "test:unit": "vue-cli-service test:unit",
-    "test": "npm run build && jest -c custom.jest.config.js"
+    "test:unit": "jest -c unit.jest.config.js",
+    "test:func": "npm run build && jest -c func.jest.config.js",
+    "test:all": "npm run build && jest -c all.jest.config.js"
+
   },
   "dependencies": {
     "core-js": "^2.6.5",
