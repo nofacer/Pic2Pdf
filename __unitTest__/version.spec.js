@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
-import Version from '@/components/Version.vue';
+const Version = require('@/components/Version.vue').default;
+
 import {
     mount
 } from '@vue/test-utils';
@@ -8,7 +9,6 @@ const wrapper = mount(Version);
 
 describe('Version.vue', () => {
     it('always pass', () => {
-        //expect(wrapper.html()).toMatch(/<div>.*<\/div>/);
         expect(true).toBe(true);
     });
 
