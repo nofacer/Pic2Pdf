@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{version()}}</h1>
+    <h1 id="version">{{version()}}</h1>
   </div>
 </template>
 

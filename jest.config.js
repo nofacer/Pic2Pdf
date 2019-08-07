@@ -26,7 +26,5 @@ module.exports = {
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname'
-  ],
-  runner: '@jest-runner/electron',
-  testEnvironment: '@jest-runner/electron/environment'
+  ]
 };
