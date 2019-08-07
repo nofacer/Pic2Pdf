@@ -11,4 +11,8 @@ describe('FolderSelector.vue', () => {
         //expect(wrapper.html()).toMatch(/<div>.*<\/div>/);
         expect(true).toBe(true);
     });
+
+    it('should have a text instruction',()=>{
+        expect(wrapper.vm.textInstruction).toBe('Selector a folder');
+    });
 });

@@ -1,26 +1,17 @@
 <template>
-  <div>
-
-  </div>
+  <div></div>
 </template>
 
 <script>
 const electron = window.require("electron");
 export default {
-  methods: {
-    version: function() {
-      return electron.remote.app.getVersion();
-    }
+  data() {
+    return {
+      textInstruction: "Selector a folder"
+    };
   }
 };
 </script>
 
 <style>
-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-}
 </style>
