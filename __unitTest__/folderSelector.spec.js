@@ -15,4 +15,8 @@ describe('FolderSelector.vue', () => {
     it('should have a text instruction',()=>{
         expect(wrapper.vm.textInstruction).toBe('Selector a folder');
     });
+
+    it('should has a variable to store the folder path',()=>{
+        expect(wrapper.vm.folderPath).toBe(null);
+    });
 });

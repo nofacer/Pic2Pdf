@@ -7,7 +7,8 @@ const electron = window.require("electron");
 export default {
   data() {
     return {
-      textInstruction: "Selector a folder"
+      textInstruction: "Selector a folder",
+      folderPath: null
     };
   }
 };
