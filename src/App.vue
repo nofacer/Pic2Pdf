@@ -5,12 +5,12 @@
 </template>
 
 <script>
-import Version from "@/components/Version.vue";
+// import Version from "@/components/Version.vue";
 
 export default {
   name: "app",
   components: {
-    Version
+    // Version
   }
 };
 </script>
