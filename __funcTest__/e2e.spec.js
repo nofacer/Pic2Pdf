@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
+jest.unmock('electron')
 const Application = require('spectron').Application;
-const electronPath = require('electron');
+const electronPath = require('electron')
 const path = require('path');
 
 describe('Application launch', function () {
