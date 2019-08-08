@@ -25,7 +25,11 @@ describe('FolderSelector.vue', () => {
     });
 
     it('should be able to select a folder', () => {
-
         expect(wrapper.vm.selectFolder(electron)).toBe('/fake_path');
+    });
+
+    it('should set folderPath variable to the path', () => {
+        wrapper.vm.selectFolder(electron);
+        expect(wrapper.vm.folderPath).toBe('/fake_path');
     });
 });

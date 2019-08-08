@@ -3,6 +3,9 @@
 </template>
 
 <script>
+import { format } from "path";
+const electron = window.require("electron");
+
 export default {
   data() {
     return {
@@ -11,10 +14,11 @@ export default {
     };
   },
   methods: {
-    selectFolder: (electronSession) => {
-      return electronSession.remote.dialog.showOpenDialogSync({
+    selectFolder: function(electronSession) {
+      this.folderPath = electronSession.remote.dialog.showOpenDialogSync({
         properties: ["openDirectory"]
       });
+      return this.folderPath;
     }
   }
 };
