@@ -10,12 +10,12 @@
     "test:unit": "jest -c unit.jest.config.js",
     "test:func": "npm run build && jest -c func.jest.config.js",
     "test:all": "npm run build && jest -c all.jest.config.js"
-
   },
   "dependencies": {
     "core-js": "^2.6.5",
     "electron": "^6.0.0",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "vuex": "^3.1.1"
   },
   "devDependencies": {
     "@jest-runner/electron": "^2.0.2",
