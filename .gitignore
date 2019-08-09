@@ -19,3 +19,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+output.pdf
+src/assets/content_fake_folder.pdf

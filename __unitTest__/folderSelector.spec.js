@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 9 */
 const FolderSelector = require('@/components/FolderSelector.vue').default;
 import {
     mount
@@ -6,7 +6,7 @@ import {
 
 const wrapper = mount(FolderSelector);
 const electron = require('electron');
-
+const path = require('path');
 
 
 describe('FolderSelector.vue', () => {
@@ -53,5 +53,18 @@ describe('FolderSelector.vue', () => {
         const incorrectPath = '/fake_path';
         wrapper.vm.validPath(incorrectPath);
         expect(wrapper.vm.textInstruction).toBe('Please select a correct folder');
+    });
+
+    it('should get file absolute path in the folder', () => {
+        wrapper.vm.folderPath = `${process.cwd()}/src/assets/content_fake_folder`;
+        const fileList = wrapper.vm.getFiles();
+        expect(fileList).toMatchObject([path.join(wrapper.vm.folderPath, '00.jpg'), path.join(wrapper.vm.folderPath, '01.jpg')]);
+    });
+
+    it('should be able to convert images to pdf', () => {
+        wrapper.vm.folderPath = `${process.cwd()}/src/assets/content_fake_folder`;
+        return wrapper.vm.convert().then((result) => {
+            expect(result).toBe(true);
+        });
     });
 });
