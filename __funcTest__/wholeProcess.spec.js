@@ -37,7 +37,7 @@ describe('Whole user journey', function () {
         await screen
             .checkWindow()
             .then(screen => screen.checkTitle())
-            .then(screen=>screen.checkText('#instruction','Select a folder'));
+            .then(screen => screen.checkText('#instruction', 'Select a folder'));
 
         await user
             .selectFolder();

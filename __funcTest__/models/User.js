@@ -13,6 +13,7 @@ class User {
 
     async selectFolder(){
         await this.app.client.element('#click').click();
+        return this;
     }
 
 

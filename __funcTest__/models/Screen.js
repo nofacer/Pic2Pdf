@@ -18,7 +18,7 @@ class Screen {
     }
 
     async checkText(id,value) {
-        const actualText=await this.app.client.getText(id)
+        const actualText=await this.app.client.getText(id);
         expect(actualText).toBe(value);
         return this;
     }
