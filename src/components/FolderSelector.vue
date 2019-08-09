@@ -21,7 +21,7 @@ export default {
     selectFolder: function(electronSession) {
       this.folderPath = electronSession.remote.dialog.showOpenDialogSync({
         properties: ["openDirectory"]
-      });
+      })[0];
       return this.folderPath;
     },
     chooseByEnv: function(env = process.env.NODE_ENV) {
