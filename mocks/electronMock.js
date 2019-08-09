@@ -3,7 +3,7 @@ jest.mock("electron", () => {
     return {
         remote: {
             dialog: {
-                showOpenDialogSync: jest.fn().mockReturnValue('/fake_path')
+                showOpenDialogSync: jest.fn().mockReturnValue('/fake_production_path')
             }
         }
     };

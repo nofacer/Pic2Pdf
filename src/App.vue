@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <Version />
+    <FolderSelector />
   </div>
 </template>
 
 <script>
-// import Version from "@/components/Version.vue";
+import FolderSelector from "@/components/FolderSelector.vue";
 
 export default {
   name: "app",
   components: {
-    // Version
+    FolderSelector
   }
 };
 </script>
