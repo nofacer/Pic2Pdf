@@ -9,16 +9,32 @@
     "dev": "NODE_ENV=DEV vue-cli-service serve & sleep 5 && NODE_ENV=DEV electron app.js",
     "test:unit": "jest -c unit.jest.config.js",
     "test:func": "npm run build && jest -c func.jest.config.js",
-    "test:all": "npm run build && jest -c all.jest.config.js"
+    "test:all": "npm run build && jest -c all.jest.config.js",
+    "dist": "electron-builder -c.extraMetadata.main=app.js "
   },
+  "build": {
+    "files": [
+      "app.js",
+      "dist/css/*",
+      "dist/js/*",
+      "dist/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "packaged"
+    }
+  },
+
+
+
   "dependencies": {
     "core-js": "^2.6.5",
-    "electron": "^6.0.0",
     "pdfkit": "^0.10.0",
     "vue": "^2.6.10",
     "vuex": "^3.1.1"
   },
   "devDependencies": {
+    "electron": "^6.0.0",
     "@jest-runner/electron": "^2.0.2",
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-plugin-eslint": "^3.10.0",
@@ -28,6 +44,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
+    "electron-builder": "^21.2.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "jest": "^24.8.0",
@@ -59,4 +76,5 @@
     "> 1%",
     "last 2 versions"
   ]
+
 }
