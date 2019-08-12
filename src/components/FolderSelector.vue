@@ -1,10 +1,12 @@
 <template>
-  <div>
-    <div id="instruction">{{textInstruction}}</div>
-
-    <button id="choose" v-on:click="chooseByEnv()"></button>
-    <p>{{folderPath}}</p>
-    <button id="convertButton" v-on:click="convert()">CONVERT!!</button>
+  <div class="appContainer">
+    <div id="choose" v-on:click="chooseByEnv()" class="chooseContainer">
+      <div id="instruction">{{textInstruction}}</div>
+      <p>{{folderPath}}</p>
+    </div>
+    <div class="buttonContainer" id="convertButton" v-on:click="convert()">
+      Convert
+    </div>
   </div>
 </template>
 
@@ -12,8 +14,7 @@
 const electron = window.require("electron");
 const fs = window.require("fs");
 const PDFDocument = window.require("pdfkit");
-const path=window.require('path');
-
+const path = window.require("path");
 
 export default {
   data() {
@@ -30,8 +31,8 @@ export default {
       return this.folderPath;
     },
     chooseByEnv: function() {
-      if (window.process.env.NODE_ENV=='test') {
-        this.folderPath =path.resolve('./src/assets/content_fake_folder');
+      if (window.process.env.NODE_ENV == "test") {
+        this.folderPath = path.resolve("./src/assets/content_fake_folder");
         return this.folderPath;
       } else {
         return this.selectFolder(electron);
@@ -79,4 +80,25 @@ export default {
 </script>
  
 <style>
+.appContainer {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.chooseContainer {
+  background-color: aquamarine;
+  height: 50vh;
+  width: 80vw;
+
+}
+
+.buttonContainer{
+  background-color:salmon;
+  width: 80vw;
+  height: 10vh;
+}
 </style>

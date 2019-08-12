@@ -34,7 +34,7 @@ describe('FolderSelector.vue', () => {
 
     it('should get different folder path in different env', () => {
         wrapper.vm.chooseByEnv('test');
-        expect(wrapper.vm.folderPath).toBe(`${process.cwd()}/src/assets/fake_path_for_test`);
+        expect(wrapper.vm.folderPath).toBe(`${process.cwd()}/src/assets/content_fake_folder`);
     });
 
     it('should valid the path is a real folder', () => {
