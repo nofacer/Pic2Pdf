@@ -38,10 +38,11 @@ describe('Whole user journey', function () {
             .checkWindow()
             .then(screen => screen.checkTitle())
             .then(screen => screen.checkText('#instruction', 'Select a folder'))
-            .then(screen=>screen.deleteFakeFile());
+            .then(screen => screen.deleteFakeFile());
 
         await user
-            .selectContentFakeFolder();
+            .selectContentFakeFolder()
+            .then(user => user.clickGenerateButton());
 
     });
 

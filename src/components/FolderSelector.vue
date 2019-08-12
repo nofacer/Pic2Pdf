@@ -4,7 +4,7 @@
 
     <button id="choose" v-on:click="chooseByEnv()"></button>
     <p>{{folderPath}}</p>
-    <button id="click" v-on:click="convert()">CONVERT!!</button>
+    <button id="convertButton" v-on:click="convert()">CONVERT!!</button>
   </div>
 </template>
 
@@ -12,6 +12,8 @@
 const electron = window.require("electron");
 const fs = window.require("fs");
 const PDFDocument = window.require("pdfkit");
+const path=window.require('path');
+
 
 export default {
   data() {
@@ -29,7 +31,7 @@ export default {
     },
     chooseByEnv: function() {
       if (window.process.env.NODE_ENV=='test') {
-        this.folderPath = `${process.cwd()}/src/assets/fake_path_for_test`;
+        this.folderPath =path.resolve('./src/assets/content_fake_folder');
         return this.folderPath;
       } else {
         return this.selectFolder(electron);

@@ -37,6 +37,7 @@ class Screen {
 
         const isExistsAgain = fs.existsSync(fakeFilePath);
         expect(isExistsAgain).toBe(false);
+        return this;
     }
 
 
