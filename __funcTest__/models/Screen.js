@@ -6,6 +6,7 @@ class Screen {
         this.app = app;
     }
 
+    
     async checkWindow() {
         const isVisible = await this.app.browserWindow.isVisible();
         expect(isVisible).toBe(true);
@@ -17,8 +18,8 @@ class Screen {
         return this;
     }
 
-    async checkText(id,value) {
-        const actualText=await this.app.client.getText(id);
+    async checkText(id, value) {
+        const actualText = await this.app.client.getText(id);
         expect(actualText).toBe(value);
         return this;
     }

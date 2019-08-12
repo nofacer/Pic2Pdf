@@ -40,8 +40,7 @@ describe('Whole user journey', function () {
             .then(screen => screen.checkText('#instruction', 'Select a folder'));
 
         await user
-            .selectFolder();
-
+            .selectContentFakeFolder();
 
     });
 

@@ -1,9 +1,9 @@
 <template>
   <div>
     <div id="instruction">{{textInstruction}}</div>
-    <button id="click" v-on:click="chooseByEnv()"></button>
-    <p>{{folderPath}}</p>
 
+    <button id="choose" v-on:click="chooseByEnv()"></button>
+    <p>{{folderPath}}</p>
     <button id="click" v-on:click="convert()">CONVERT!!</button>
   </div>
 </template>
@@ -27,8 +27,8 @@ export default {
       })[0];
       return this.folderPath;
     },
-    chooseByEnv: function(env = process.env.NODE_ENV) {
-      if (env == "test") {
+    chooseByEnv: function() {
+      if (window.process.env.NODE_ENV=='test') {
         this.folderPath = `${process.cwd()}/src/assets/fake_path_for_test`;
         return this.folderPath;
       } else {

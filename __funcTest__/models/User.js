@@ -6,19 +6,10 @@ class User {
         this.app = app;
     }
 
-    // async click(id) {
-    //     await this.app.client.element('#click').click();
-    //     return this;
-    // }
-
-    async selectFolder(){
-        await this.app.client.element('#click').click();
+    async selectContentFakeFolder() {
+        await this.app.client.element('#choose').click();
         return this;
     }
-
-
-
-
 }
 
 module.exports = {
