@@ -4,9 +4,7 @@
       <div id="instruction">{{textInstruction}}</div>
       <p>{{folderPath}}</p>
     </div>
-    <div class="buttonContainer" id="convertButton" v-on:click="convert()">
-      Convert
-    </div>
+    <div class="buttonContainer" id="convertButton" v-on:click="convert()">Convert</div>
   </div>
 </template>
 
@@ -20,36 +18,44 @@ export default {
   data() {
     return {
       textInstruction: "Select a folder",
-      folderPath: null
+      folderPath: null,
+      state: null
     };
   },
   methods: {
-    selectFolder: function(electronSession) {
-      this.folderPath = electronSession.remote.dialog.showOpenDialogSync({
-        properties: ["openDirectory"]
-      })[0];
+    selectFolder: function() {
+      if (window.process.env.NODE_ENV != "test") {
+        this.folderPath = electron.remote.dialog.showOpenDialogSync({
+          properties: ["openDirectory"]
+        })[0];
+      } else {
+        this.folderPath = path.resolve("./src/assets/content_fake_folder");
+      }
+      this.validPath(this.folderPath);
       return this.folderPath;
     },
     chooseByEnv: function() {
       if (window.process.env.NODE_ENV == "test") {
         this.folderPath = path.resolve("./src/assets/content_fake_folder");
-        return this.folderPath;
       } else {
-        return this.selectFolder(electron);
+        this.folderPath = this.selectFolder(electron);
       }
+      this.validPath(this.folderPath);
+      return this.folderPath;
     },
     validPath: function(path) {
       const isExists = fs.existsSync(path);
       if (!isExists) {
         this.textInstruction = "Please select a correct folder";
-        return false;
+        this.state = false;
       } else {
         let stat = fs.lstatSync(path);
         stat.isDirectory()
           ? (this.textInstruction = path)
           : (this.textInstruction = "Please select a correct folder");
-        return stat.isDirectory();
+        this.state = stat.isDirectory();
       }
+      return this.state;
     },
     getFiles: function() {
       let names = fs.readdirSync(this.folderPath).sort();
@@ -66,9 +72,20 @@ export default {
         doc.pipe(fs.createWriteStream(outputPath)).on("finish", function() {
           resolve(true);
         });
-        doc.image(images[0]);
+        console.log(doc.page.height)
+        doc.image(images[0],0,0,{
+          fit:[doc.page.width,doc.page.height],
+          align: "center",
+          valign: "center"
+        });
         for (let i = 1; i < images.length; i++) {
-          doc.addPage().image(images[i]);
+          doc
+            .addPage()
+            .image(images[i],0,0, {
+              fit:[doc.page.width,doc.page.height],
+              align: "center",
+              valign: "center"
+            });
         }
         doc.end();
       });
@@ -93,11 +110,10 @@ export default {
   background-color: aquamarine;
   height: 50vh;
   width: 80vw;
-
 }
 
-.buttonContainer{
-  background-color:salmon;
+.buttonContainer {
+  background-color: salmon;
   width: 80vw;
   height: 10vh;
 }
