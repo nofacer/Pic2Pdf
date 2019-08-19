@@ -11,6 +11,7 @@ const path = require('path');
 
 describe('FolderSelector.vue', () => {
     beforeEach(() => {});
+
     it('always pass', () => {
         expect(true).toBe(true);
     });
@@ -19,23 +20,15 @@ describe('FolderSelector.vue', () => {
         expect(wrapper.vm.textInstruction).toBe('Select a folder');
     });
 
-    it('should has a variable to store the folder path', () => {
-        expect(wrapper.vm.folderPath).toBe(null);
-    });
-
     it('should be able to select a folder', () => {
-        expect(wrapper.vm.selectFolder(electron)).toBe('/fake_production_path');
+        expect(wrapper.vm.selectFolder()).toBe(path.resolve("./src/assets/content_fake_folder"));
     });
 
-    it('should set folderPath variable to the path', () => {
-        wrapper.vm.selectFolder(electron);
-        expect(wrapper.vm.folderPath).toBe('/fake_production_path');
+    it('should has a variable to store the folder path', () => {
+        wrapper.vm.selectFolder();
+        expect(wrapper.vm.folderPath).toBe(path.resolve("./src/assets/content_fake_folder"));
     });
 
-    it('should get different folder path in different env', () => {
-        wrapper.vm.chooseByEnv('test');
-        expect(wrapper.vm.folderPath).toBe(`${process.cwd()}/src/assets/content_fake_folder`);
-    });
 
     it('should valid the path is a real folder', () => {
         expect(wrapper.vm.validPath(`${process.cwd()}/src/assets/fake_path_for_test`)).toBe(true);
@@ -43,9 +36,23 @@ describe('FolderSelector.vue', () => {
         expect(wrapper.vm.validPath(`${process.cwd()}/assets/app.js`)).toBe(false);
     });
 
+    it('should have a state variable to know the state of selected folder', () => {
+        wrapper.vm.validPath(`${process.cwd()}/src/assets/fake_path_for_test`);
+        expect(wrapper.vm.state).toBe(true);
+        wrapper.vm.validPath('/fake_path');
+        expect(wrapper.vm.state).toBe(false);
+        wrapper.vm.validPath(`${process.cwd()}/assets/app.js`);
+        expect(wrapper.vm.state).toBe(false);
+    });
+
+    it('should valid after selecting a file/folder', () => {
+        wrapper.vm.selectFolder();
+        expect(wrapper.vm.state).toBe(true);
+    });
+
     it('should change instruction to folder path if it is a valid folder path', () => {
-        const correctPath = `${process.cwd()}/src/assets/fake_path_for_test`;
-        wrapper.vm.validPath(correctPath);
+        const correctPath =  path.resolve("./src/assets/content_fake_folder");
+        wrapper.vm.selectFolder();
         expect(wrapper.vm.textInstruction).toBe(correctPath);
     });
 
