@@ -51,7 +51,7 @@ describe('FolderSelector.vue', () => {
     });
 
     it('should change instruction to folder path if it is a valid folder path', () => {
-        const correctPath =  path.resolve("./src/assets/content_fake_folder");
+        const correctPath = path.resolve("./src/assets/content_fake_folder");
         wrapper.vm.selectFolder();
         expect(wrapper.vm.textInstruction).toBe(correctPath);
     });
@@ -75,14 +75,13 @@ describe('FolderSelector.vue', () => {
         });
     });
 
-  
+
 
     it('should get convet state with running when not coverting', () => {
         wrapper.vm.folderPath = `${process.cwd()}/src/assets/content_fake_folder`;
         wrapper.vm.convert();
-        
         expect(wrapper.vm.convertState).toBe('running');
-    
+
     });
 
     it('should get convet state with success when finish coverting', () => {
@@ -90,7 +89,7 @@ describe('FolderSelector.vue', () => {
         return wrapper.vm.convert().then(() => {
             expect(wrapper.vm.convertState).toBe('success');
         });
-        
-    
+
+
     });
 });

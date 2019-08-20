@@ -10,9 +10,9 @@
       :class="{'disable':(state!=true)}"
     >
       <transition name="fade" mode="out-in">
-        <p v-if="convertState=='none'" key="convert">Convert</p>
-        <p v-if="convertState=='running'" key="running">Converting</p>
-        <p v-if="convertState=='success'" key=succeed>Succeed</p>
+        <p v-if="convertState==='none'" key="none">Convert</p>
+        <p v-if="convertState==='running'" key="running">Converting</p>
+        <p v-if="convertState==='success'" key=succeed>Succeed</p>
       </transition>
     </div>
   </div>
@@ -77,6 +77,7 @@ export default {
 
     convert: function() {
       this.convertState = "running";
+      console.log(this.convertState)
       const images = this.getFiles();
       const doc = new PDFDocument();
       const outputPath = this.folderPath + ".pdf";
@@ -174,7 +175,7 @@ textarea,
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 1s ease;
+  transition: opacity 0.3s ease;
 }
 .fade-enter,
 .fade-leave-to {
