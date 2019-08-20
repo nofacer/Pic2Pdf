@@ -3,8 +3,17 @@
     <div id="choose" v-on:click="selectFolder()" class="chooseContainer dark-blur flex-item">
       <div id="instruction">{{textInstruction}}</div>
     </div>
-    <div class="buttonContainer dark-blur flex-item" id="convertButton" v-on:click="convert()">
-      <p>Convert</p>
+    <div
+      class="buttonContainer dark-blur flex-item"
+      id="convertButton"
+      v-on:click="convert()"
+      :class="{'disable':(state!=true)}"
+    >
+      <transition name="fade" mode="out-in">
+        <p v-if="convertState=='none'" key="convert">Convert</p>
+        <p v-if="convertState=='running'" key="running">Converting</p>
+        <p v-if="convertState=='success'" key=succeed>Succeed</p>
+      </transition>
     </div>
   </div>
 </template>
@@ -19,7 +28,8 @@ export default {
   data() {
     return {
       folderPath: null,
-      state: null
+      state: null,
+      convertState: "none"
     };
   },
   computed: {
@@ -42,6 +52,7 @@ export default {
       } else {
         this.folderPath = path.resolve("./src/assets/content_fake_folder");
       }
+      this.convertState='none';
       this.validPath(this.folderPath);
       return this.folderPath;
     },
@@ -63,7 +74,9 @@ export default {
       }
       return names;
     },
+
     convert: function() {
+      this.convertState = "running";
       const images = this.getFiles();
       const doc = new PDFDocument();
       const outputPath = this.folderPath + ".pdf";
@@ -72,8 +85,10 @@ export default {
         align: "center",
         valign: "center"
       };
+      var self = this;
       var p = new Promise(function(resolve) {
         doc.pipe(fs.createWriteStream(outputPath)).on("finish", function() {
+          self.convertState = "success";
           resolve(true);
         });
         doc.image(images[0], 0, 0, imageConfig);
@@ -82,6 +97,7 @@ export default {
         }
         doc.end();
       });
+
       return p;
     }
   }
@@ -93,14 +109,16 @@ export default {
 :not(input):not(textarea),
 :not(input):not(textarea)::after,
 :not(input):not(textarea)::before {
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
 }
-input, button, textarea, :focus {
-    outline: none; 
+input,
+button,
+textarea,
+:focus {
+  outline: none;
 }
-
 
 .flex-item {
   display: flex;
@@ -132,7 +150,6 @@ input, button, textarea, :focus {
   background-color: #cfdee7;
 }
 
-
 .chooseContainer {
   height: 60vh;
   width: 80vw;
@@ -143,6 +160,26 @@ input, button, textarea, :focus {
   height: 10vh;
 }
 
+#instruction {
+  word-break: break-word;
+  margin: 20px;
+}
+
+.disable {
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.45);
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.1);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s ease;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 /* @keyframes mymove {
   from {
       height: 60vh;

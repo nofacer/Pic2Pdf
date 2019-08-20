@@ -74,4 +74,23 @@ describe('FolderSelector.vue', () => {
             expect(result).toBe(true);
         });
     });
+
+  
+
+    it('should get convet state with running when not coverting', () => {
+        wrapper.vm.folderPath = `${process.cwd()}/src/assets/content_fake_folder`;
+        wrapper.vm.convert();
+        
+        expect(wrapper.vm.convertState).toBe('running');
+    
+    });
+
+    it('should get convet state with success when finish coverting', () => {
+        wrapper.vm.folderPath = `${process.cwd()}/src/assets/content_fake_folder`;
+        return wrapper.vm.convert().then(() => {
+            expect(wrapper.vm.convertState).toBe('success');
+        });
+        
+    
+    });
 });
