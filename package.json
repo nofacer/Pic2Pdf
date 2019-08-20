@@ -23,7 +23,7 @@
     "directories": {
       "output": "packaged"
     },
-    "icon":"dist/book_logo.png"
+    "icon":"book_logo.png"
   },
 
 
