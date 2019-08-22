@@ -1,7 +1,7 @@
 <template>
   <div
     class="appContainer flex-item"
-    :class="{'convert-background':(convertState=='none'),'running-background':(convertState=='running'),'success-background':(convertState=='success')}"
+    :class="{'convert-background':(convertState=='none'),'running-background':(convertState=='running'),'success-background':(convertState=='success'),'error-background':(state==false)}"
   >
     <div id="choose" v-on:click="selectFolder()" class="chooseContainer dark-blur flex-item">
       <div id="instruction">{{textInstruction}}</div>
@@ -97,12 +97,42 @@ export default {
       }
       return names;
     },
+    getFileType: function(filePath) {
+      var startIndex = filePath.lastIndexOf(".");
+      if (startIndex != -1)
+        return filePath
+          .substring(startIndex + 1, filePath.length)
+          .toLowerCase();
+      else return "";
+    },
+    preConvert: function(files) {
+      if (files.length < 1) {
+        this.state = false;
+        return false;
+      }
+
+      let filteredImages = [];
+
+      for (let i = 0; i < files.length; i++) {
+        if (
+          this.getFileType(files[i]) == "jpg" ||
+          this.getFileType(files[i]) == "png"
+        ) {
+          filteredImages.push(files[i]);
+        }
+      }
+
+      return filteredImages;
+    },
 
     convert: async function() {
+      let images = this.getFiles();
+      if (!this.preConvert(images)) return false;
+      images = this.preConvert(images);
       let vm = this;
       this.convertState = "running";
       await this.delay(600);
-      const images = this.getFiles();
+
       const doc = new PDFDocument();
       const outputPath = this.folderPath + ".pdf";
       const imageConfig = {
@@ -183,6 +213,10 @@ textarea,
 
 .success-background {
   background-color: #34db50;
+}
+
+.error-background {
+  background-color: #db3434;
 }
 
 .chooseContainer {

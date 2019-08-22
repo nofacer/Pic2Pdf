@@ -89,7 +89,24 @@ describe('FolderSelector.vue', () => {
         return wrapper.vm.convert().then(() => {
             expect(wrapper.vm.convertState).toBe('success');
         });
-
-
     });
+
+    it('should return false when there is no files in the folder', () => {
+        const files = [];
+        expect(wrapper.vm.preConvert(files)).toBe(false);
+        expect(wrapper.vm.state).toBe(false);
+    });
+
+    it('should get correct file type', () => {
+        const file1 = 'demo.jpg';
+        const file2 = 'demo.png';
+        expect(wrapper.vm.getFileType(file1)).toBe('jpg');
+        expect(wrapper.vm.getFileType(file2)).toBe('png');
+    });
+
+    it('should return correct format file', () => {
+        const files = ['1.png', 'text', '1.txt', '3.png'];
+        expect(wrapper.vm.preConvert(files)).toMatchObject(['1.png', '3.png']);
+    });
+
 });
