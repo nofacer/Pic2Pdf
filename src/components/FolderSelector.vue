@@ -1,5 +1,8 @@
 <template>
-  <div class="appContainer flex-item">
+  <div
+    class="appContainer flex-item"
+    :class="{'convert-background':(convertState=='none'),'running-background':(convertState=='running'),'success-background':(convertState=='success')}"
+  >
     <div id="choose" v-on:click="selectFolder()" class="chooseContainer dark-blur flex-item">
       <div id="instruction">{{textInstruction}}</div>
     </div>
@@ -7,18 +10,18 @@
       class="buttonContainer dark-blur flex-item"
       id="convertButton"
       v-on:click="convert()"
-      :class="{'disable':(state!=true)}"
+      :class="{'disable':(state!=true ),'disable-click':(state!=true || convertState=='running')}"
     >
       <transition name="fade" mode="out-in">
-        <p v-if="convertState==='none'" key="none">Convert</p>
-        <p v-if="convertState==='running'" key="running">Converting</p>
-        <p v-if="convertState==='success'" key=succeed>Succeed</p>
+        <p v-bind:key="convertState">{{convertMessage}}</p>
       </transition>
     </div>
   </div>
 </template>
 
 <script>
+import { Promise } from "q";
+import { setTimeout } from "timers";
 const electron = window.require("electron");
 const fs = window.require("fs");
 const PDFDocument = window.require("pdfkit");
@@ -33,6 +36,21 @@ export default {
     };
   },
   computed: {
+    convertMessage: function() {
+      let result;
+      switch (this.convertState) {
+        case "none":
+          result = "Convert";
+          break;
+        case "running":
+          result = "Converting";
+          break;
+        case "success":
+          result = "Success";
+          break;
+      }
+      return result;
+    },
     textInstruction: function() {
       if (this.state == null) {
         return "Select a folder";
@@ -44,6 +62,11 @@ export default {
     }
   },
   methods: {
+    delay: function(ms) {
+      return new Promise(res => {
+        setTimeout(res, ms);
+      });
+    },
     selectFolder: function() {
       if (window.process.env.NODE_ENV != "test") {
         this.folderPath = electron.remote.dialog.showOpenDialogSync({
@@ -52,7 +75,7 @@ export default {
       } else {
         this.folderPath = path.resolve("./src/assets/content_fake_folder");
       }
-      this.convertState='none';
+      this.convertState = "none";
       this.validPath(this.folderPath);
       return this.folderPath;
     },
@@ -75,9 +98,10 @@ export default {
       return names;
     },
 
-    convert: function() {
+    convert: async function() {
+      let vm = this;
       this.convertState = "running";
-      console.log(this.convertState)
+      await this.delay(600);
       const images = this.getFiles();
       const doc = new PDFDocument();
       const outputPath = this.folderPath + ".pdf";
@@ -86,10 +110,9 @@ export default {
         align: "center",
         valign: "center"
       };
-      var self = this;
       var p = new Promise(function(resolve) {
         doc.pipe(fs.createWriteStream(outputPath)).on("finish", function() {
-          self.convertState = "success";
+          vm.convertState = "success";
           resolve(true);
         });
         doc.image(images[0], 0, 0, imageConfig);
@@ -147,8 +170,19 @@ textarea,
   margin: 0;
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(145deg, #2c3e50, #3498db);
-  background-color: #cfdee7;
+  transition: 1s;
+}
+
+.convert-background {
+  background-color: #3498db;
+}
+
+.running-background {
+  background-color: #d8db34;
+}
+
+.success-background {
+  background-color: #34db50;
 }
 
 .chooseContainer {
@@ -159,6 +193,11 @@ textarea,
 .buttonContainer {
   width: 80vw;
   height: 10vh;
+  transition: 1s;
+}
+
+.buttonContainer:before {
+  background: #2c3e50;
 }
 
 #instruction {
@@ -167,10 +206,13 @@ textarea,
 }
 
 .disable {
-  pointer-events: none;
   background-color: rgba(0, 0, 0, 0.45);
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.45);
   color: rgba(255, 255, 255, 0.1);
+}
+
+.disable-click {
+  pointer-events: none;
 }
 
 .fade-enter-active,
@@ -181,18 +223,4 @@ textarea,
 .fade-leave-to {
   opacity: 0;
 }
-/* @keyframes mymove {
-  from {
-      height: 60vh;
-      width: 80vw;
-      box-shadow: 5px 5px 20px black;
-      font-size: 1em;
-  }
-  to {
-      height: 61.5vh;
-      width: 82vw;
-      box-shadow: 5px 5px 40px black;
-      font-size: 1.25em;
-  }
-} */
 </style>
