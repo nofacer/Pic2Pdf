@@ -7,6 +7,8 @@ import {
 const wrapper = mount(FolderSelector);
 const electron = require('electron');
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
 
 
 describe('FolderSelector.vue', () => {
@@ -108,5 +110,43 @@ describe('FolderSelector.vue', () => {
         const files = ['1.png', 'text', '1.txt', '3.png'];
         expect(wrapper.vm.preConvert(files)).toMatchObject(['1.png', '3.png']);
     });
+
+    it('if output path is null then output to the same path', async () => {
+        const fakeFilePath = `${process.cwd()}/src/assets/content_fake_folder.pdf`;
+        const isExists = fs.existsSync(fakeFilePath);
+        if (isExists) {
+            try {
+                fs.unlinkSync(fakeFilePath);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        wrapper.vm.outputPath = null;
+        return wrapper.vm.convert().then(() => {
+            const isExistsAgain = fs.existsSync(fakeFilePath);
+            expect(isExistsAgain).toBe(true);
+        });
+    });
+
+    it('if output path is not null then output to the that path', async () => {
+        const fakeFilePath = os.homedir()+'/Downloads/content_fake_folder.pdf';
+        const isExists = fs.existsSync(fakeFilePath);
+        if (isExists) {
+            try {
+                fs.unlinkSync(fakeFilePath);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        
+
+        wrapper.vm.outputPath = os.homedir()+'/Downloads';
+        return wrapper.vm.convert().then(() => {
+            const isExistsAgain = fs.existsSync(fakeFilePath);
+            expect(isExistsAgain).toBe(true);
+        });
+    });
+
 
 });

@@ -6,6 +6,17 @@
     <div id="choose" v-on:click="selectFolder()" class="chooseContainer dark-blur flex-item">
       <div id="instruction">{{textInstruction}}</div>
     </div>
+
+    <div
+      id="choose"
+      v-on:click="selectOutputPath()"
+      class="outputChooseContainer dark-blur flex-item"
+    >
+      <div id="instruction">
+        <p v-if="(outputPath==null)">Default Output Path : Same Place</p>
+        <p v-else>{{outputPath}}</p>
+      </div>
+    </div>
     <div
       class="buttonContainer dark-blur flex-item"
       id="convertButton"
@@ -32,7 +43,8 @@ export default {
     return {
       folderPath: null,
       state: null,
-      convertState: "none"
+      convertState: "none",
+      outputPath: null
     };
   },
   computed: {
@@ -78,6 +90,11 @@ export default {
       this.convertState = "none";
       this.validPath(this.folderPath);
       return this.folderPath;
+    },
+    selectOutputPath: function() {
+      this.outputPath = electron.remote.dialog.showOpenDialogSync({
+        properties: ["openDirectory"]
+      })[0];
     },
 
     validPath: function(path) {
@@ -134,14 +151,22 @@ export default {
       await this.delay(600);
 
       const doc = new PDFDocument();
-      const outputPath = this.folderPath + ".pdf";
+
+      const filename = path.basename(this.folderPath) + ".pdf";
+      let out;
+      if (this.outputPath == null) {
+        out = this.folderPath + ".pdf";
+      } else {
+        out = path.join(this.outputPath, filename);
+      }
+
       const imageConfig = {
         fit: [doc.page.width, doc.page.height],
         align: "center",
         valign: "center"
       };
       var p = new Promise(function(resolve) {
-        doc.pipe(fs.createWriteStream(outputPath)).on("finish", function() {
+        doc.pipe(fs.createWriteStream(out)).on("finish", function() {
           vm.convertState = "success";
           resolve(true);
         });
@@ -220,7 +245,12 @@ textarea,
 }
 
 .chooseContainer {
-  height: 60vh;
+  height: 50vh;
+  width: 80vw;
+}
+
+.outputChooseContainer {
+  height: 10vh;
   width: 80vw;
 }
 
